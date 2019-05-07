@@ -42,7 +42,7 @@ public class Application {
 		}
 		
 		Appoinment [] appoinments = new Appoinment[n];
-		for(int i =0; i<n;i++) {
+		for(int i =0; i<n; i++) {
 			
 			Calendar calendar = Calendar.getInstance();
 			//Random selection either 5 mins behind time or 11 mins behind time
@@ -79,8 +79,11 @@ public class Application {
 	    	l1=new JLabel("No appoinments to display !!");
 	    	l2=new JLabel("");
 	    	l6=new JLabel("");
+	    	l4.setText("");
 	    	l3.setText("");
 	    	l5.setText("");
+	    	present.setEnabled(false);
+	    	absent.setEnabled(false);
 	    }
 	    else {
 		    l1=new JLabel(appoinmentQueue.Appoinments.peek().getStudent().getEmail());    
