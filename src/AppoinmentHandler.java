@@ -46,7 +46,6 @@ public class AppoinmentHandler {
     			calendar.add(Calendar.DATE, 10);
     			top.getStudent().setBannedTill(calendar.getTime());
     			BannedAppoinments.add(top);
-    			System.out.println(BannedAppoinments.peek().getStudent().getBannedTill());
     			return "Student banned";
     		}
     	}
