@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Random;
 import java.lang.*;
+import java.awt.Color;
 
 public class Application {
 	
@@ -64,6 +65,10 @@ public class Application {
 		JFrame f=new JFrame("Appoinment");
 	    JButton present=new JButton("Present");
 	    JButton absent=new JButton("Absent");
+	    present.setBackground(Color.GREEN);
+	    absent.setBackground(Color.RED);
+	    present.setOpaque(true);
+	    absent.setOpaque(true);
 	    JPanel displayPanel = new JPanel();
 	    displayPanel.setBounds(20,80,300,100);   
 	    JLabel l1,l2,l3,l4,l5,l6;
@@ -74,7 +79,7 @@ public class Application {
 	    l5 = new JLabel("Appoinment Time: ");
 	    
 	    
-	    //Data for inital frame
+	    //Data for initial frame
 	    if(appoinmentQueue.Appoinments.isEmpty()) {
 	    	l1=new JLabel("No appoinments to display !!");
 	    	l2=new JLabel("");
@@ -106,10 +111,12 @@ public class Application {
 	    
 	    present.setBounds(50,200,95,30);
 	    
+	    f.getContentPane().setBackground(new Color (255,255,102));
+
 	    
 	    //Frame to display the current Queue
 	    JFrame f2 = new JFrame("Appoinment Queue");
-	    f2.setVisible(true);
+	    f2.setVisible(false);
 	    ArrayList<String> data = new ArrayList<String>();
 		for(Appoinment a : appoinmentQueue.Appoinments) { 
 			data.add(a.getStudent().getEmail()+" : "+a.getQuestion()+" ");
@@ -117,16 +124,33 @@ public class Application {
 		
 		JList list = new JList(data.toArray());
         JPanel innerPanel = new JPanel();
-        innerPanel.add(list);
+        JPanel outerPanel = new JPanel();
+        innerPanel.add(list); 
         innerPanel.setBounds(20,80,300,100); 
         f2.add(innerPanel);    
-	    f2.setSize(400,400);
-	    
-	    
+	    f2.setSize(500,500);
+	    outerPanel.setBackground(new Color (255,255,102));
+	    f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	    JButton exit = new JButton("Exit");
+	    exit.setBounds(200,200,95,30);
+	    exit.setBackground(Color.RED);
+	    exit.setOpaque(true);
+	    outerPanel.add(exit);
+	    ActionListener al = new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            System.exit(0);
+	        }
+	    };
+	    exit.addActionListener(al);
+	    f2.add(outerPanel);  
 	    //Action on clicking present
 	    present.addActionListener(new ActionListener(){  
 	    	public void actionPerformed(ActionEvent e){
-	    			appoinmentQueue.Appoinments.remove();
+	    			f.dispose();
+	    			f2.setVisible(true);
+	    			appoinmentQueue.markPresent();
 	    			displayPanel.removeAll();
 	    			
 	    			//If queue is empty
@@ -142,8 +166,8 @@ public class Application {
 	    		    else {
 	    			    l3.setText("Student Email: ");
 	    			    l4.setText("Student Question: ");
-	    			    l1.setText(appoinmentQueue.Appoinments.peek().getStudent().getEmail());    
-	    			    l2.setText(appoinmentQueue.Appoinments.peek().getQuestion());
+	    			    l1.setText(appoinmentQueue.firstInQueue().getEmail());    
+	    			    l2.setText(appoinmentQueue.firstQuestionInQueue());
 	    			    l5.setText("Appoinment Time: ");
 	    			    l6.setText(dateFormat.format(appoinmentQueue.Appoinments.peek().getDate())); 
 	    			    displayPanel.add(l3);
@@ -159,28 +183,23 @@ public class Application {
 	    			for(Appoinment a : appoinmentQueue.Appoinments) { 
 	    				data.add(a.getStudent().getEmail()+" : "+a.getQuestion()+" ");
 	    			}
+	    			if(data.size()==0) {
+	    				data.add("No appoinments available !!");
+	    			}
 	    			JList list = new JList(data.toArray());
 	    			innerPanel.removeAll();
 	    			innerPanel.add(list);
-	    			innerPanel.revalidate();innerPanel.repaint();
-	    			
+	    			innerPanel.revalidate();innerPanel.repaint();	
 	    			
 	    	        }  
 	    	    });  
 	    
 	  //Action on clicking absent
 	    absent.addActionListener(new ActionListener(){  
-	    	public void actionPerformed(ActionEvent e){  
-	    			Appoinment top = appoinmentQueue.Appoinments.remove();
-	    			
-	    			Calendar calendar = Calendar.getInstance();
-	    			long diff = Math.abs(calendar.getTime().getMinutes()-top.getDate().getMinutes());
-	    			if(diff < 10) {
-		    			appoinmentQueue.Appoinments.add(top);
-	    			}else{
-	    				appoinmentQueue.BannedAppoinments.add(top);
-	    			}
-	    		
+	    	public void actionPerformed(ActionEvent e){
+	    			f.dispose();
+	    			f2.setVisible(true);
+	    			appoinmentQueue.markAbsent();
 	    	        displayPanel.removeAll();
 	    		    if(appoinmentQueue.Appoinments.isEmpty()) {
 	    		    	l1.setText("No appoinments to display !!");
@@ -191,8 +210,8 @@ public class Application {
 	    		    else {
 	    			    l3.setText("Student Email: ");
 	    			    l4.setText("Student Question: ");
-	    			    l1.setText(appoinmentQueue.Appoinments.peek().getStudent().getEmail());    
-	    			    l2.setText(appoinmentQueue.Appoinments.peek().getQuestion());
+	    			    l1.setText(appoinmentQueue.firstInQueue().getEmail());    
+	    			    l2.setText(appoinmentQueue.firstQuestionInQueue());
 	    			    l5.setText("Appoinment Time: ");
 	    			    l6.setText(dateFormat.format(appoinmentQueue.Appoinments.peek().getDate())); 
 	    			    displayPanel.add(l3);
@@ -207,6 +226,9 @@ public class Application {
 	    			ArrayList<String> data = new ArrayList<String>();
 	    			for(Appoinment a : appoinmentQueue.Appoinments) { 
 	    				data.add(a.getStudent().getEmail()+" : "+a.getQuestion()+" ");
+	    			}
+	    			if(data.size()==0) {
+	    				data.add("No appoinments available !!");
 	    			}
 	    			JList list = new JList(data.toArray());
 	    			innerPanel.removeAll();
