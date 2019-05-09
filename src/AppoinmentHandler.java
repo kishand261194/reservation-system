@@ -10,6 +10,8 @@ public class AppoinmentHandler {
     		Appoinments.add(app[i]);
     	}
     }
+    
+    //check if any appointment in queue and as the student is present the appointment is removed from the queue
     public String markPresent() {
     	if(Appoinments.isEmpty()){
     		return "Queue is empty";
@@ -28,6 +30,11 @@ public class AppoinmentHandler {
     	return Appoinments.peek().getQuestion();
     }
     
+    
+    //check if any appointment in queue.
+    // If the student is late my less than 10 mins the appointment is add to the end of the queue
+    // If the student is late by more than 10 mins the student is removed from the queue, 
+    // marked as banned and his/her ban period is set
     public String markAbsent() {
     	
     	if(Appoinments.isEmpty()){
