@@ -10,8 +10,14 @@ public class AppoinmentHandler {
     		Appoinments.add(app[i]);
     	}
     }
-    public void markPresent() {
-    	Appoinments.remove();
+    public String markPresent() {
+    	if(Appoinments.isEmpty()){
+    		return "Queue is empty";
+    	}
+    	else{
+    		Appoinments.remove();
+    		return "Student marked present";
+    	}
     }
     
     public Student firstInQueue(){
@@ -22,15 +28,26 @@ public class AppoinmentHandler {
     	return Appoinments.peek().getQuestion();
     }
     
-    public void markAbsent() {
-		Appoinment top = Appoinments.remove();
-		
-		Calendar calendar = Calendar.getInstance();
-		long diff = Math.abs(calendar.getTime().getMinutes()-top.getDate().getMinutes());
-		if(diff < 10) {
-			Appoinments.add(top);
-		}else{
-			BannedAppoinments.add(top);
-		}
+    public String markAbsent() {
+    	
+    	if(Appoinments.isEmpty()){
+    		return "Queue is empty";
+    	}
+    	else{
+    		Appoinment top = Appoinments.remove();
+    		
+    		Calendar calendar = Calendar.getInstance();
+    		long diff = Math.abs(calendar.getTime().getMinutes()-top.getDate().getMinutes());
+    		if(diff < 10) {
+    			Appoinments.add(top);
+    			return "Student added to end of queue";
+    		}else{
+    			top.getStudent().setBanned(true);
+    			BannedAppoinments.add(top);
+    			return "Student banned";
+    		}
+    	}
+    	
+    
     }
 }
