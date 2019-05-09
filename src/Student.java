@@ -1,8 +1,10 @@
+import java.util.Date;
 
 public class Student {
 	private String name;
 	private String email;
 	private boolean isBanned;
+	private Date bannedTill;
 	
     public Student(String name, String email) {
         this.setName(name);
@@ -31,6 +33,14 @@ public class Student {
 
 	public void setBanned(boolean isBanned) {
 		this.isBanned = isBanned;
+	}
+
+	public Date getBannedTill() {
+		return bannedTill;
+	}
+
+	public void setBannedTill(Date bannedTill) {
+		this.bannedTill = bannedTill;
 	}
 
 

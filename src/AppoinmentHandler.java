@@ -43,7 +43,10 @@ public class AppoinmentHandler {
     			return "Student added to end of queue";
     		}else{
     			top.getStudent().setBanned(true);
+    			calendar.add(Calendar.DATE, 10);
+    			top.getStudent().setBannedTill(calendar.getTime());
     			BannedAppoinments.add(top);
+    			System.out.println(BannedAppoinments.peek().getStudent().getBannedTill());
     			return "Student banned";
     		}
     	}
