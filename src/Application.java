@@ -1,16 +1,20 @@
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.awt.event.*;
-import java.util.Date;
 import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
+import java.util.List;
 import java.util.Random;
-import java.lang.*;
-import java.awt.Color;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 public class Application {
 	
 	
@@ -33,13 +37,23 @@ public class Application {
 		
 		for(int i =0; i<n;i++) {
 			//random selection name
-			int randName = rand.nextInt(4);
+			int randName = rand.nextInt(names.length);
 			
 			//random selection email
-			int randEmail = rand.nextInt(4);
+			int randEmail = rand.nextInt(names.length);
 			
 			//Create student
 			students[i] = new Student(names[randName], emails[randEmail]);
+			
+			//Remove used name
+			List<String> namelist = new ArrayList<String>(Arrays.asList(names));
+			namelist.remove(names[randName]);
+			names = namelist.toArray(new String[0]);
+			
+			//Remove used email
+			List<String> emaillist = new ArrayList<String>(Arrays.asList(emails));
+			emaillist.remove(emails[randEmail]);
+			emails = emaillist.toArray(new String[0]);
 		}
 		
 		Appoinment [] appoinments = new Appoinment[n];
@@ -47,7 +61,7 @@ public class Application {
 			
 			Calendar calendar = Calendar.getInstance();
 			//Random selection either 5 mins behind time or 11 mins behind time
-			int[] mins = {5, 11};
+			int[] mins = {0, 5, 11};
 			int rnd = new Random().nextInt(mins.length);
 			calendar.add(Calendar.MINUTE, -mins[rnd]);
 			
@@ -131,6 +145,7 @@ public class Application {
 	    f2.setSize(500,500);
 	    outerPanel.setBackground(new Color (255,255,102));
 	    f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	    JButton exit = new JButton("Exit");
 	    exit.setBounds(200,200,95,30);
